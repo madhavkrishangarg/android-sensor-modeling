@@ -5,12 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [AccelerometerEntity::class], version = 1)
-abstract class AccelerometerDatabase {
+@Database(entities = [AccelerometerEntity::class], version = 2)
+abstract class AccelerometerDatabase : RoomDatabase() {
 
     abstract fun accelerometerDao(): AccelerometerDao
 
-    object DatabaseFactory {
+    object DatabaseBuilder {
+        @Volatile
         private var INSTANCE: AccelerometerDatabase? = null
 
         fun getInstance(context: Context): AccelerometerDatabase {
@@ -18,7 +19,7 @@ abstract class AccelerometerDatabase {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AccelerometerDatabase::class.java,
-                    "accelerometer_database"
+                    "accelerator_database"
                 ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 instance

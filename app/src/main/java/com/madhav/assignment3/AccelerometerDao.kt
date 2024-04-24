@@ -4,10 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 
+@Dao
 interface AccelerometerDao {
     @Insert
-    fun insert(accelerometerEntity: AccelerometerEntity)
+    fun upsert(accelerometer: AccelerometerEntity)
 
-    @Query("SELECT * FROM accelerator_table")
-    fun getAll(): List<AccelerometerEntity>
+    @Query("SELECT * FROM accelerator_table ORDER BY timestamp ASC")
+    fun getAccelerometerData(): List<AccelerometerEntity>
 }
