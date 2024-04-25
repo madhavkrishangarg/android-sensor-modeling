@@ -44,12 +44,27 @@ import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.Dispatchers
 
 class MainActivity : ComponentActivity() {
+
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var sensorEventListener: SensorEventListener? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AccelerometerApp()
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterSensorListener()
+    }
+
+    private fun unregisterSensorListener() {
+        sensorManager?.unregisterListener(sensorEventListener)
+    }
+
 }
 
 @Composable
@@ -199,7 +214,7 @@ fun AccelerometerApp() {
     ) {
         Button(
             onClick = {
-                     val intent = Intent(context, GraphActivity::class.java)
+                     val intent = Intent(context, Graphs::class.java)
                      context.startActivity(intent)
             },
             modifier = Modifier

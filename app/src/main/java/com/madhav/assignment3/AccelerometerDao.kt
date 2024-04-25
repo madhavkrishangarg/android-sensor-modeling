@@ -3,6 +3,7 @@ package com.madhav.assignment3
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AccelerometerDao {
@@ -10,5 +11,5 @@ interface AccelerometerDao {
     fun upsert(accelerometer: AccelerometerEntity)
 
     @Query("SELECT * FROM accelerator_table ORDER BY timestamp ASC")
-    fun getAccelerometerData(): List<AccelerometerEntity>
+    fun getAccelerometerData(): Flow<List<AccelerometerEntity>>
 }
