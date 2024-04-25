@@ -2,10 +2,15 @@ package com.madhav.assignment3
 
 import android.app.Application
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -34,15 +40,25 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.madhav.assignment3.ui.theme.Assignment3Theme
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import android.Manifest
+import android.app.Activity
+import android.provider.MediaStore
+import androidx.activity.result.IntentSenderRequest
+
 
 class Graphs : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GraphsActivity()
         }
     }
+
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -59,15 +75,20 @@ class GraphsViewModel(application: Application) : AndroidViewModel(application) 
     }
 }
 
+
+
 @Composable
 fun GraphsActivity(graphsViewModel: GraphsViewModel = viewModel()) {
     val context = LocalContext.current
     val accelerometerData by graphsViewModel.accelerometerData.observeAsState(initial = emptyList())
 
+
     Log.i("GraphsActivity", "Accelerometer data: $accelerometerData")
 
     if (accelerometerData.isNotEmpty()) {
+        Log.i("GraphsActivity", "Accelerometer data: $accelerometerData")
         LineGraph(accelerometerData)
+
     } else {
         Box(
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -95,9 +116,9 @@ fun GraphsActivity(graphsViewModel: GraphsViewModel = viewModel()) {
                 text = "Back", fontSize = 18.sp
             )
         }
-
-
     }
+
+
 }
 
 @Composable
